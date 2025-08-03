@@ -18,7 +18,7 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-6">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-primary">Dr. Professor Name</h1>
+            <h1 className="text-2xl font-bold text-primary">Dr. Gaurav Varshney</h1>
           </div>
 
           {/* Desktop Navigation */}
@@ -33,7 +33,7 @@ export const Header = () => {
               onClick={() => scrollToSection('research')}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              Research
+              Research & Projects
             </button>
             <button
               onClick={() => scrollToSection('students')}
@@ -75,7 +75,7 @@ export const Header = () => {
                 onClick={() => scrollToSection('research')}
                 className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
               >
-                Research
+                Research & Projects
               </button>
               <button
                 onClick={() => scrollToSection('students')}

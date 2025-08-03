@@ -134,7 +134,7 @@ export const Students = () => {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="current">Current ({currentStudents.length})</TabsTrigger>
             <TabsTrigger value="graduated">Graduated ({graduatedStudents.length})</TabsTrigger>
-            <TabsTrigger value="alumni">Alumni ({alumni.length})</TabsTrigger>
+            <TabsTrigger value="alumni">Phd Scholars ({alumni.length})</TabsTrigger>
           </TabsList>
           
           <TabsContent value="current" className="mt-8">

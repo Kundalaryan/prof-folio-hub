@@ -158,7 +158,7 @@ const Admin = () => {
                 <CardHeader>
                   <CardTitle>Students Management</CardTitle>
                   <CardDescription>
-                    Manage information about current students, graduates, and alumni
+                    Manage information about current students, graduates, and Researcher
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
