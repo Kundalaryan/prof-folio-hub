@@ -98,6 +98,51 @@ export type Database = {
         }
         Relationships: []
       }
+      publications: {
+        Row: {
+          abstract: string | null
+          authors: string
+          citation_count: number | null
+          created_at: string
+          doi: string | null
+          id: string
+          journal: string | null
+          publication_type: string | null
+          title: string
+          updated_at: string
+          url: string | null
+          year: number | null
+        }
+        Insert: {
+          abstract?: string | null
+          authors: string
+          citation_count?: number | null
+          created_at?: string
+          doi?: string | null
+          id?: string
+          journal?: string | null
+          publication_type?: string | null
+          title: string
+          updated_at?: string
+          url?: string | null
+          year?: number | null
+        }
+        Update: {
+          abstract?: string | null
+          authors?: string
+          citation_count?: number | null
+          created_at?: string
+          doi?: string | null
+          id?: string
+          journal?: string | null
+          publication_type?: string | null
+          title?: string
+          updated_at?: string
+          url?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
       research_projects: {
         Row: {
           collaborators: string[] | null
