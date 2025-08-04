@@ -114,7 +114,7 @@ export const Publications = () => {
             className="mb-8"
           >
             <a 
-              href="https://scholar.google.com" 
+              href="https://scholar.google.co.in/citations?user=AgLr5dcAAAAJ&hl=en" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2"
