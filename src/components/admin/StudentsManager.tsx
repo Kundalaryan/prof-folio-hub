@@ -19,13 +19,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 const studentSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address").optional().or(z.literal("")),
-  degree_level: z.enum(['undergraduate', 'masters', 'phd', 'postdoc']),
+  degree_level: z.enum(['undergraduate', 'masters', 'phd', 'intern']),
   program: z.string().optional(),
   year_started: z.string().optional(),
   graduation_year: z.string().optional(),
   research_area: z.string().optional(),
   thesis_title: z.string().optional(),
-  status: z.enum(['current', 'graduated', 'alumni']),
+  status: z.enum(['current', 'graduated', 'alumni', 'completed', 'ongoing']),
   bio: z.string().optional(),
   image_url: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
   linkedin_url: z.string().url("Please enter a valid URL").optional().or(z.literal("")),
@@ -301,7 +301,7 @@ export const StudentsManager = () => {
                             <SelectItem value="undergraduate">Undergraduate</SelectItem>
                             <SelectItem value="masters">Masters</SelectItem>
                             <SelectItem value="phd">PhD</SelectItem>
-                            <SelectItem value="postdoc">Postdoc</SelectItem>
+                            <SelectItem value="intern">Intern</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -325,6 +325,8 @@ export const StudentsManager = () => {
                             <SelectItem value="current">Current</SelectItem>
                             <SelectItem value="graduated">Graduated</SelectItem>
                             <SelectItem value="alumni">Alumni</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="ongoing">Ongoing</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
