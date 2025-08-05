@@ -52,10 +52,15 @@ export const Students = () => {
     );
   }
 
-  const currentStudents = students?.filter(s => s.status === 'current') || [];
-  const graduatedStudents = students?.filter(s => s.status === 'completed') || [];
-  const alumni = students?.filter(s => s.status === 'alumni') || [];
-  const interns = students?.filter(s => s.degree_level === 'intern') || [];
+  // Filter by status: ongoing and completed  
+  const ongoingStudents = students?.filter(s => s.status === 'ongoing') || [];
+  const completedStudents = students?.filter(s => s.status === 'completed') || [];
+  
+  // Filter by degree level: undergraduate, masters, phd, intern
+  const undergraduateStudents = students?.filter(s => s.degree_level === 'undergraduate') || [];
+  const mastersStudents = students?.filter(s => s.degree_level === 'masters') || [];
+  const phdStudents = students?.filter(s => s.degree_level === 'phd') || [];
+  const internStudents = students?.filter(s => s.degree_level === 'intern') || [];
 
   const StudentCard = ({ student }: { student: any }) => (
     <Card className="h-full">
@@ -131,66 +136,96 @@ export const Students = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-12">Students</h2>
         
-        <Tabs defaultValue="current" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="current">Current ({currentStudents.length})</TabsTrigger>
-            <TabsTrigger value="interns">Interns ({interns.length})</TabsTrigger>
-            <TabsTrigger value="graduated">Graduated ({graduatedStudents.length})</TabsTrigger>
-            <TabsTrigger value="alumni">PhD Scholars ({alumni.length})</TabsTrigger>
+        <Tabs defaultValue="ongoing" className="w-full">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="ongoing">Ongoing ({ongoingStudents.length})</TabsTrigger>
+            <TabsTrigger value="completed">Completed ({completedStudents.length})</TabsTrigger>
+            <TabsTrigger value="undergraduate">Undergraduate ({undergraduateStudents.length})</TabsTrigger>
+            <TabsTrigger value="masters">Masters ({mastersStudents.length})</TabsTrigger>
+            <TabsTrigger value="phd">PhD ({phdStudents.length})</TabsTrigger>
+            <TabsTrigger value="interns">Interns ({internStudents.length})</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="current" className="mt-8">
-            {currentStudents.length > 0 ? (
+          <TabsContent value="ongoing" className="mt-8">
+            {ongoingStudents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentStudents.map((student) => (
+                {ongoingStudents.map((student) => (
                   <StudentCard key={student.id} student={student} />
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-xl text-muted-foreground">No current students listed.</p>
+                <p className="text-xl text-muted-foreground">No ongoing students listed.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="completed" className="mt-8">
+            {completedStudents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {completedStudents.map((student) => (
+                  <StudentCard key={student.id} student={student} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-muted-foreground">No completed students listed.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="undergraduate" className="mt-8">
+            {undergraduateStudents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {undergraduateStudents.map((student) => (
+                  <StudentCard key={student.id} student={student} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-muted-foreground">No undergraduate students listed.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="masters" className="mt-8">
+            {mastersStudents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mastersStudents.map((student) => (
+                  <StudentCard key={student.id} student={student} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-muted-foreground">No masters students listed.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="phd" className="mt-8">
+            {phdStudents.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {phdStudents.map((student) => (
+                  <StudentCard key={student.id} student={student} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-muted-foreground">No PhD students listed.</p>
               </div>
             )}
           </TabsContent>
           
           <TabsContent value="interns" className="mt-8">
-            {interns.length > 0 ? (
+            {internStudents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {interns.map((student) => (
+                {internStudents.map((student) => (
                   <StudentCard key={student.id} student={student} />
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
                 <p className="text-xl text-muted-foreground">No interns listed.</p>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="graduated" className="mt-8">
-            {graduatedStudents.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {graduatedStudents.map((student) => (
-                  <StudentCard key={student.id} student={student} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-xl text-muted-foreground">No graduated students listed.</p>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="alumni" className="mt-8">
-            {alumni.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {alumni.map((student) => (
-                  <StudentCard key={student.id} student={student} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-xl text-muted-foreground">No alumni listed.</p>
               </div>
             )}
           </TabsContent>
