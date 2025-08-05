@@ -53,8 +53,9 @@ export const Students = () => {
   }
 
   const currentStudents = students?.filter(s => s.status === 'current') || [];
-  const graduatedStudents = students?.filter(s => s.status === 'graduated') || [];
+  const graduatedStudents = students?.filter(s => s.status === 'completed') || [];
   const alumni = students?.filter(s => s.status === 'alumni') || [];
+  const interns = students?.filter(s => s.degree_level === 'intern') || [];
 
   const StudentCard = ({ student }: { student: any }) => (
     <Card className="h-full">
@@ -131,10 +132,11 @@ export const Students = () => {
         <h2 className="text-3xl font-bold text-center mb-12">Students</h2>
         
         <Tabs defaultValue="current" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="current">Current ({currentStudents.length})</TabsTrigger>
+            <TabsTrigger value="interns">Interns ({interns.length})</TabsTrigger>
             <TabsTrigger value="graduated">Graduated ({graduatedStudents.length})</TabsTrigger>
-            <TabsTrigger value="alumni">Phd Scholars ({alumni.length})</TabsTrigger>
+            <TabsTrigger value="alumni">PhD Scholars ({alumni.length})</TabsTrigger>
           </TabsList>
           
           <TabsContent value="current" className="mt-8">
@@ -147,6 +149,20 @@ export const Students = () => {
             ) : (
               <div className="text-center py-12">
                 <p className="text-xl text-muted-foreground">No current students listed.</p>
+              </div>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="interns" className="mt-8">
+            {interns.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {interns.map((student) => (
+                  <StudentCard key={student.id} student={student} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-xl text-muted-foreground">No interns listed.</p>
               </div>
             )}
           </TabsContent>
