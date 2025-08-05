@@ -225,6 +225,7 @@ export const StudentsManager = () => {
   const currentStudents = students?.filter(s => s.status === 'current') || [];
   const graduatedStudents = students?.filter(s => s.status === 'graduated') || [];
   const alumni = students?.filter(s => s.status === 'alumni') || [];
+  const interns = students?.filter(s => s.degree_level === 'intern') || [];
 
   return (
     <div className="space-y-6">
@@ -557,6 +558,57 @@ export const StudentsManager = () => {
             <h4 className="text-md font-medium mb-3">Graduated Students ({graduatedStudents.length})</h4>
             <div className="grid gap-3">
               {graduatedStudents.map((student) => (
+                <Card key={student.id}>
+                  <CardContent className="pt-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src={student.image_url || "/placeholder.svg"} alt={student.name} />
+                          <AvatarFallback>
+                            {student.name.split(' ').map((n: string) => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{student.name}</p>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {student.degree_level.charAt(0).toUpperCase() + student.degree_level.slice(1)}
+                            </Badge>
+                            {student.year_started && (
+                              <span className="text-xs text-muted-foreground">
+                                {student.year_started}
+                                {student.graduation_year && ` - ${student.graduation_year}`}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(student)}>
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => deleteStudentMutation.mutate(student.id)}
+                          disabled={deleteStudentMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {interns.length > 0 && (
+          <div>
+            <h4 className="text-md font-medium mb-3">Interns ({interns.length})</h4>
+            <div className="grid gap-3">
+              {interns.map((student) => (
                 <Card key={student.id}>
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
