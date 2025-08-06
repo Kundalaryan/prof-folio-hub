@@ -19,9 +19,10 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'display': ['Playfair Display', 'serif'],
-				'body': ['Inter', 'sans-serif'],
-				'sans': ['Inter', 'sans-serif'],
+				'display': ['Inconsolata', 'monospace'],
+				'body': ['Inconsolata', 'monospace'],
+				'sans': ['Inconsolata', 'monospace'],
+				'mono': ['Inconsolata', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

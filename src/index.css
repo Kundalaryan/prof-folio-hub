@@ -50,8 +50,8 @@ All colors MUST be HSL.
     --shadow-card: 0 4px 20px -4px hsl(var(--foreground) / 0.08);
     
     /* Typography Scale */
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-display: 'Inconsolata', monospace;
+    --font-body: 'Inconsolata', monospace;
     
     --radius: 0.75rem;
     
