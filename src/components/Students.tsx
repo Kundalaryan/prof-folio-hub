@@ -28,20 +28,21 @@ export const Students = () => {
           <h2 className="text-3xl font-bold text-center mb-12">Students</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-muted rounded-full"></div>
-                    <div className="flex-1">
-                      <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-muted rounded w-1/2"></div>
+                <Card key={i} className="animate-pulse border-border/50">
+                <CardHeader className="pb-4">
+                  <div className="space-y-3">
+                    <div className="h-6 bg-muted rounded w-3/4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-5 bg-muted rounded w-16"></div>
+                      <div className="h-5 bg-muted rounded w-20"></div>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-muted rounded"></div>
+                <CardContent className="pt-0">
+                  <div className="space-y-3">
+                    <div className="h-3 bg-muted rounded w-full"></div>
                     <div className="h-3 bg-muted rounded w-5/6"></div>
+                    <div className="h-3 bg-muted rounded w-4/5"></div>
                   </div>
                 </CardContent>
               </Card>
@@ -63,70 +64,78 @@ export const Students = () => {
   const internStudents = students?.filter(s => s.degree_level === 'intern') || [];
 
   const StudentCard = ({ student }: { student: any }) => (
-    <Card className="h-full">
-      <CardHeader>
-        <div className="flex items-start gap-4">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src={student.image_url || "/placeholder.svg"} alt={student.name} />
-            <AvatarFallback>
-              {student.name.split(' ').map((n: string) => n[0]).join('')}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0">
-            <CardTitle className="text-lg">{student.name}</CardTitle>
-            <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline">
-                {student.degree_level.charAt(0).toUpperCase() + student.degree_level.slice(1)}
-              </Badge>
-              {student.year_started && (
-                <Badge variant="secondary">
-                  {student.year_started}
-                  {student.graduation_year && ` - ${student.graduation_year}`}
-                </Badge>
+    <Card className="h-full border-border/50 hover:border-border transition-colors">
+      <CardHeader className="pb-4">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-xl font-semibold text-foreground">{student.name}</CardTitle>
+            <div className="flex gap-2">
+              {student.linkedin_url && (
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                  <a href={student.linkedin_url} target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="h-4 w-4" />
+                    <span className="sr-only">LinkedIn Profile</span>
+                  </a>
+                </Button>
+              )}
+              {student.website_url && (
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                  <a href={student.website_url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-4 w-4" />
+                    <span className="sr-only">Personal Website</span>
+                  </a>
+                </Button>
               )}
             </div>
           </div>
-          <div className="flex gap-2">
-            {student.linkedin_url && (
-              <Button variant="ghost" size="icon" asChild>
-                <a href={student.linkedin_url} target="_blank" rel="noopener noreferrer">
-                  <Linkedin className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-            {student.website_url && (
-              <Button variant="ghost" size="icon" asChild>
-                <a href={student.website_url} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </Button>
+          
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="default" className="text-xs">
+              {student.degree_level.charAt(0).toUpperCase() + student.degree_level.slice(1)}
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              {student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+            </Badge>
+            {student.year_started && (
+              <Badge variant="secondary" className="text-xs">
+                {student.year_started}
+                {student.graduation_year && ` - ${student.graduation_year}`}
+              </Badge>
             )}
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="pt-0">
-        {student.program && (
-          <p className="text-sm text-muted-foreground mb-2">
-            <span className="font-medium">Program:</span> {student.program}
-          </p>
-        )}
-        
-        {student.research_area && (
-          <p className="text-sm text-muted-foreground mb-2">
-            <span className="font-medium">Research Area:</span> {student.research_area}
-          </p>
-        )}
-        
-        {student.thesis_title && (
-          <p className="text-sm text-muted-foreground mb-2">
-            <span className="font-medium">Thesis:</span> {student.thesis_title}
-          </p>
-        )}
-        
-        {student.bio && (
-          <p className="text-sm text-muted-foreground mt-4">{student.bio}</p>
-        )}
+        <CardContent className="pt-0 space-y-3">
+        <div className="grid gap-3">
+          {student.program && (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Program</span>
+              <p className="text-sm text-foreground">{student.program}</p>
+            </div>
+          )}
+          
+          {student.research_area && (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Research Area</span>
+              <p className="text-sm text-foreground">{student.research_area}</p>
+            </div>
+          )}
+          
+          {student.thesis_title && (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Thesis</span>
+              <p className="text-sm text-foreground leading-relaxed">{student.thesis_title}</p>
+            </div>
+          )}
+          
+          {student.bio && (
+            <div className="flex flex-col gap-1 pt-2 border-t border-border/50">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Bio</span>
+              <p className="text-sm text-foreground leading-relaxed">{student.bio}</p>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
