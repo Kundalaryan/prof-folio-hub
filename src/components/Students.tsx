@@ -64,14 +64,14 @@ export const Students = () => {
   const internStudents = students?.filter(s => s.degree_level === 'intern') || [];
 
   const StudentCard = ({ student }: { student: any }) => (
-    <Card className="h-full border-border/50 hover:border-border transition-colors">
+    <Card className="card-enhanced">
       <CardHeader className="pb-4">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-semibold text-foreground">{student.name}</CardTitle>
+            <CardTitle className="heading-tertiary">{student.name}</CardTitle>
             <div className="flex gap-2">
               {student.linkedin_url && (
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
                   <a href={student.linkedin_url} target="_blank" rel="noopener noreferrer">
                     <Linkedin className="h-4 w-4" />
                     <span className="sr-only">LinkedIn Profile</span>
@@ -79,7 +79,7 @@ export const Students = () => {
                 </Button>
               )}
               {student.website_url && (
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
                   <a href={student.website_url} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-4 w-4" />
                     <span className="sr-only">Personal Website</span>
@@ -90,7 +90,7 @@ export const Students = () => {
           </div>
           
           <div className="flex flex-wrap gap-2">
-            <Badge variant="default" className="text-xs">
+            <Badge variant="default" className="text-xs font-medium">
               {student.degree_level.charAt(0).toUpperCase() + student.degree_level.slice(1)}
             </Badge>
             <Badge variant="outline" className="text-xs">
@@ -141,9 +141,9 @@ export const Students = () => {
   );
 
   return (
-    <section id="students" className="py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center mb-12">Students</h2>
+    <section id="students" className="section-padding bg-gradient-hero">
+      <div className="container-custom">
+        <h2 className="heading-secondary text-center mb-12 animate-fade-in">Students</h2>
         
         <Tabs defaultValue="ongoing" className="w-full">
           <TabsList className="grid w-full grid-cols-6">
