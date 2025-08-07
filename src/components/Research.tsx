@@ -70,7 +70,7 @@ export const Research = () => {
                       project.status === 'ongoing' ? 'default' :
                       project.status === 'completed' ? 'secondary' : 'outline'
                     }>
-                      {project.status}
+                      {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                     </Badge>
                     {project.project_url && (
                       <Button variant="ghost" size="icon" asChild>
