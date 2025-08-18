@@ -12,12 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Edit, Plus, GripVertical } from "lucide-react";
+import { Trash2, Edit, Plus, GripVertical, Upload } from "lucide-react";
 
 const gallerySchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional().or(z.literal("")),
-  image_url: z.string().min(1, "Image URL is required").url("Please enter a valid URL"),
+  image_file: z.any().optional(),
   alt_text: z.string().optional().or(z.literal("")),
   display_order: z.number().min(0),
   is_active: z.boolean().default(true),
@@ -40,6 +40,8 @@ interface GalleryImage {
 export const GalleryManager = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -61,23 +63,50 @@ export const GalleryManager = () => {
     defaultValues: {
       title: "",
       description: "",
-      image_url: "",
       alt_text: "",
       display_order: 0,
       is_active: true,
     },
   });
 
+  const uploadImage = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('gallery-images')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('gallery-images')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const createImageMutation = useMutation({
     mutationFn: async (data: GalleryForm) => {
+      let imageUrl = '';
+      
+      if (selectedFile) {
+        setIsUploading(true);
+        imageUrl = await uploadImage(selectedFile);
+      }
+
       const insertData = {
         title: data.title,
         description: data.description || null,
-        image_url: data.image_url,
+        image_url: imageUrl,
         alt_text: data.alt_text || null,
         display_order: data.display_order,
         is_active: data.is_active,
       };
+      
       const { error } = await supabase.from('gallery').insert(insertData);
       if (error) throw error;
     },
@@ -89,7 +118,9 @@ export const GalleryManager = () => {
         description: "Gallery image added successfully!",
       });
       setIsDialogOpen(false);
+      setSelectedFile(null);
       form.reset();
+      setIsUploading(false);
     },
     onError: (error) => {
       toast({
@@ -98,19 +129,28 @@ export const GalleryManager = () => {
         variant: "destructive",
       });
       console.error('Error creating gallery image:', error);
+      setIsUploading(false);
     },
   });
 
   const updateImageMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: GalleryForm }) => {
+      let imageUrl = editingImage?.image_url || '';
+      
+      if (selectedFile) {
+        setIsUploading(true);
+        imageUrl = await uploadImage(selectedFile);
+      }
+
       const updateData = {
         title: data.title,
         description: data.description || null,
-        image_url: data.image_url,
+        image_url: imageUrl,
         alt_text: data.alt_text || null,
         display_order: data.display_order,
         is_active: data.is_active,
       };
+      
       const { error } = await supabase
         .from('gallery')
         .update(updateData)
@@ -126,7 +166,9 @@ export const GalleryManager = () => {
       });
       setIsDialogOpen(false);
       setEditingImage(null);
+      setSelectedFile(null);
       form.reset();
+      setIsUploading(false);
     },
     onError: (error) => {
       toast({
@@ -135,6 +177,7 @@ export const GalleryManager = () => {
         variant: "destructive",
       });
       console.error('Error updating gallery image:', error);
+      setIsUploading(false);
     },
   });
 
@@ -163,10 +206,10 @@ export const GalleryManager = () => {
 
   const handleEdit = (image: GalleryImage) => {
     setEditingImage(image);
+    setSelectedFile(null);
     form.reset({
       title: image.title,
       description: image.description || "",
-      image_url: image.image_url,
       alt_text: image.alt_text || "",
       display_order: image.display_order,
       is_active: image.is_active,
@@ -176,11 +219,11 @@ export const GalleryManager = () => {
 
   const handleCreate = () => {
     setEditingImage(null);
+    setSelectedFile(null);
     const nextOrder = images ? Math.max(...images.map(img => img.display_order), -1) + 1 : 0;
     form.reset({
       title: "",
       description: "",
-      image_url: "",
       alt_text: "",
       display_order: nextOrder,
       is_active: true,
@@ -188,7 +231,31 @@ export const GalleryManager = () => {
     setIsDialogOpen(true);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type.startsWith('image/')) {
+        setSelectedFile(file);
+      } else {
+        toast({
+          title: "Error",
+          description: "Please select a valid image file.",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   const onSubmit = (data: GalleryForm) => {
+    if (!editingImage && !selectedFile) {
+      toast({
+        title: "Error",
+        description: "Please select an image file.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (editingImage) {
       updateImageMutation.mutate({ id: editingImage.id, data });
     } else {
@@ -254,22 +321,28 @@ export const GalleryManager = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="image_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image URL</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="https://example.com/image.jpg"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                <div className="space-y-2">
+                  <FormLabel>Image Upload</FormLabel>
+                  <div className="flex items-center gap-4">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="flex-1"
+                    />
+                    {selectedFile && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Upload className="h-4 w-4" />
+                        {selectedFile.name}
+                      </div>
+                    )}
+                  </div>
+                  {editingImage && !selectedFile && (
+                    <p className="text-sm text-muted-foreground">
+                      Leave empty to keep current image
+                    </p>
                   )}
-                />
+                </div>
 
                 <FormField
                   control={form.control}
@@ -338,9 +411,9 @@ export const GalleryManager = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    disabled={createImageMutation.isPending || updateImageMutation.isPending}
+                    disabled={createImageMutation.isPending || updateImageMutation.isPending || isUploading}
                   >
-                    {editingImage ? "Update" : "Create"} Image
+                    {isUploading ? "Uploading..." : editingImage ? "Update" : "Create"} Image
                   </Button>
                 </div>
               </form>
