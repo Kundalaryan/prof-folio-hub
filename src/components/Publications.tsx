@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ExternalLink, GraduationCap } from "lucide-react";
 
 export const Publications = () => {
+  const [filter, setFilter] = useState<'all' | 'recent' | 'older'>('all');
+  const [showCount, setShowCount] = useState(6);
+
   const { data: publications, isLoading } = useQuery({
     queryKey: ['publications'],
     queryFn: async () => {
@@ -18,6 +23,17 @@ export const Publications = () => {
       return data;
     },
   });
+
+  const currentYear = new Date().getFullYear();
+  
+  const filteredPublications = publications?.filter((pub) => {
+    if (filter === 'recent') return pub.year >= currentYear - 3;
+    if (filter === 'older') return pub.year < currentYear - 3;
+    return true;
+  }) || [];
+
+  const displayedPublications = filteredPublications.slice(0, showCount);
+  const hasMore = filteredPublications.length > showCount;
 
   if (isLoading) {
     return (
@@ -124,17 +140,44 @@ export const Publications = () => {
               <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
+
+          <Tabs value={filter} onValueChange={(value) => {
+            setFilter(value as 'all' | 'recent' | 'older');
+            setShowCount(6);
+          }} className="w-full max-w-md mx-auto">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="recent">Recent (3 years)</TabsTrigger>
+              <TabsTrigger value="older">Older</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
         
-        {publications && publications.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6">
-            {publications.map((publication) => (
-              <PublicationCard key={publication.id} publication={publication} />
-            ))}
-          </div>
+        {filteredPublications.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 gap-6">
+              {displayedPublications.map((publication) => (
+                <PublicationCard key={publication.id} publication={publication} />
+              ))}
+            </div>
+            
+            {hasMore && (
+              <div className="text-center mt-8">
+                <Button 
+                  onClick={() => setShowCount(prev => prev + 6)}
+                  variant="outline"
+                  size="lg"
+                >
+                  Load More Publications
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-xl text-muted-foreground">No publications listed yet.</p>
+            <p className="text-xl text-muted-foreground">
+              {filter === 'all' ? 'No publications listed yet.' : `No ${filter} publications found.`}
+            </p>
           </div>
         )}
       </div>

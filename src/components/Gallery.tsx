@@ -68,8 +68,11 @@ export const Gallery = () => {
             opts={{
               align: "start",
               loop: true,
+              duration: 30,
+              skipSnaps: false,
+              dragFree: false,
             }}
-            plugins={[Autoplay({ delay: 4000 })]}
+            plugins={[Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
