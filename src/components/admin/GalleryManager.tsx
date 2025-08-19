@@ -15,7 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Trash2, Edit, Plus, GripVertical, Upload } from "lucide-react";
 
 const gallerySchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z.string().optional().or(z.literal("")),
   description: z.string().optional().or(z.literal("")),
   image_file: z.any().optional(),
   alt_text: z.string().optional().or(z.literal("")),
@@ -294,7 +294,7 @@ export const GalleryManager = () => {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Title (Optional)</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter image title" {...field} />
                       </FormControl>

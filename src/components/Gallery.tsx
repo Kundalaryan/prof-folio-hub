@@ -4,10 +4,9 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay";
 
 interface GalleryImage {
   id: string;
@@ -70,6 +69,7 @@ export const Gallery = () => {
               align: "start",
               loop: true,
             }}
+            plugins={[Autoplay({ delay: 4000 })]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
@@ -98,8 +98,6 @@ export const Gallery = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden sm:flex -left-4 lg:-left-12" />
-            <CarouselNext className="hidden sm:flex -right-4 lg:-right-12" />
           </Carousel>
         </div>
       </div>
