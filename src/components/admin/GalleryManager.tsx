@@ -183,10 +183,28 @@ export const GalleryManager = () => {
 
   const deleteImageMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from('gallery').delete().eq('id', id);
-      if (error) throw error;
+      console.log('Attempting to delete gallery image with ID:', id);
+      
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user);
+      
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+      
+      const { data, error } = await supabase.from('gallery').delete().eq('id', id);
+      console.log('Delete result:', { data, error });
+      
+      if (error) {
+        console.error('Delete error details:', error);
+        throw error;
+      }
+      
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Delete successful:', data);
       queryClient.invalidateQueries({ queryKey: ['admin-gallery-images'] });
       queryClient.invalidateQueries({ queryKey: ['gallery-images'] });
       toast({
@@ -195,12 +213,12 @@ export const GalleryManager = () => {
       });
     },
     onError: (error) => {
+      console.error('Delete mutation error:', error);
       toast({
         title: "Error",
-        description: "Failed to delete gallery image. Please try again.",
+        description: `Failed to delete gallery image: ${error.message}`,
         variant: "destructive",
       });
-      console.error('Error deleting gallery image:', error);
     },
   });
 
