@@ -193,6 +193,43 @@ export const GalleryManager = () => {
         throw new Error('User not authenticated');
       }
       
+      // First, get the image record to extract the file path
+      const { data: imageRecord, error: fetchError } = await supabase
+        .from('gallery')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+      
+      if (fetchError) {
+        console.error('Error fetching image record:', fetchError);
+        throw fetchError;
+      }
+      
+      // Extract file path from the storage URL
+      let filePath = '';
+      if (imageRecord?.image_url) {
+        // Extract the file path from the full URL
+        // URL format: https://[project-ref].supabase.co/storage/v1/object/public/gallery-images/[filename]
+        const urlParts = imageRecord.image_url.split('/');
+        filePath = urlParts[urlParts.length - 1]; // Get the filename
+      }
+      
+      // Delete the file from storage if we have a file path
+      if (filePath) {
+        console.log('Deleting file from storage:', filePath);
+        const { error: storageError } = await supabase.storage
+          .from('gallery-images')
+          .remove([filePath]);
+        
+        if (storageError) {
+          console.error('Storage deletion error:', storageError);
+          // Don't throw here - continue with database deletion even if storage fails
+        } else {
+          console.log('File deleted from storage successfully');
+        }
+      }
+      
+      // Delete the database record
       const { data, error } = await supabase.from('gallery').delete().eq('id', id);
       console.log('Delete result:', { data, error });
       
@@ -209,7 +246,7 @@ export const GalleryManager = () => {
       queryClient.invalidateQueries({ queryKey: ['gallery-images'] });
       toast({
         title: "Success",
-        description: "Gallery image deleted successfully!",
+        description: "Gallery image and file deleted successfully!",
       });
     },
     onError: (error) => {
