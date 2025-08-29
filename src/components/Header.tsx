@@ -51,7 +51,7 @@ export const Header = () => {
               onClick={() => scrollToSection('gallery')}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
-              Gallery
+              Awards
             </button>
             <button
               onClick={() => scrollToSection('contact')}

@@ -56,10 +56,10 @@ export const Gallery = () => {
     <section id="gallery" className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Gallery</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Awards & Achievements</h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            A visual showcase of our research activities, events, and milestones
+            A visual showcase of our Awards & Achievements
           </p>
         </div>
 
