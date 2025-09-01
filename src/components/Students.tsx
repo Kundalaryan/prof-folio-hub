@@ -67,25 +67,33 @@ export const Students = () => {
     <Card className="card-enhanced">
       <CardHeader className="pb-4">
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="heading-tertiary">{student.name}</CardTitle>
-            <div className="flex gap-2">
-              {student.linkedin_url && (
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
-                  <a href={student.linkedin_url} target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="h-4 w-4" />
-                    <span className="sr-only">LinkedIn Profile</span>
-                  </a>
-                </Button>
-              )}
-              {student.website_url && (
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
-                  <a href={student.website_url} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4" />
-                    <span className="sr-only">Personal Website</span>
-                  </a>
-                </Button>
-              )}
+          <div className="flex items-center gap-4">
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={student.image_url} alt={student.name} />
+              <AvatarFallback className="text-lg font-semibold">
+                {student.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <CardTitle className="heading-tertiary">{student.name}</CardTitle>
+              <div className="flex gap-2 mt-2">
+                {student.linkedin_url && (
+                  <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
+                    <a href={student.linkedin_url} target="_blank" rel="noopener noreferrer">
+                      <Linkedin className="h-4 w-4" />
+                      <span className="sr-only">LinkedIn Profile</span>
+                    </a>
+                  </Button>
+                )}
+                {student.website_url && (
+                  <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 hover:bg-primary/10 hover:text-primary">
+                    <a href={student.website_url} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="h-4 w-4" />
+                      <span className="sr-only">Personal Website</span>
+                    </a>
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
           
