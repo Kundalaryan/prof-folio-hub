@@ -9,11 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Students = () => {
   const { data: students, isLoading } = useQuery({
-    queryKey: ['students'],
+    queryKey: ['students-public'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('students')
-        .select('*')
+        .rpc('get_students_public')
         .order('year_started', { ascending: false });
       
       if (error) throw error;

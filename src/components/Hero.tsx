@@ -5,11 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Hero = () => {
   const { data: profile } = useQuery({
-    queryKey: ['profile'],
+    queryKey: ['profile-public'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
+        .rpc('get_profiles_public')
         .limit(1)
         .maybeSingle();
       
@@ -42,19 +41,19 @@ export const Hero = () => {
             
             {profile && (
               <div className="mt-8 space-y-2">
-                {profile.email && (
+                {profile.email_available && (
                   <p className="text-muted-foreground">
-                    <span className="font-medium">Email:</span> {profile.email}
+                    <span className="font-medium">Email:</span> {profile.email_available}
                   </p>
                 )}
-                {profile.phone && (
+                {profile.phone_available && (
                   <p className="text-muted-foreground">
-                    <span className="font-medium">Phone:</span> {profile.phone}
+                    <span className="font-medium">Phone:</span> {profile.phone_available}
                   </p>
                 )}
-                {profile.office_location && (
+                {profile.office_available && (
                   <p className="text-muted-foreground">
-                    <span className="font-medium">Office:</span> {profile.office_location}
+                    <span className="font-medium">Office:</span> {profile.office_available}
                   </p>
                 )}
               </div>
