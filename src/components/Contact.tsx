@@ -38,16 +38,33 @@ export const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase
-        .from('messages')
-        .insert({
+      const response = await supabase.functions.invoke('contact-submit', {
+        body: {
           name: data.name,
           email: data.email,
           subject: data.subject,
           message: data.message,
-        });
+        },
+      });
 
-      if (error) throw error;
+      if (response.error) throw response.error;
+
+      const { data: result, error: dataError } = response;
+      
+      if (dataError) throw dataError;
+
+      if (result.rateLimited) {
+        toast({
+          title: "Rate limit exceeded",
+          description: result.error || "Too many submissions. Please wait before trying again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
       toast({
         title: "Message sent successfully!",
