@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_rate_limits: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: unknown
+          submission_count: number
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address: unknown
+          submission_count?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: unknown
+          submission_count?: number
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       gallery: {
         Row: {
           alt_text: string | null
@@ -295,6 +322,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_profiles_public: {
         Args: Record<PropertyKey, never>
         Returns: {
