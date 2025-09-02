@@ -25,11 +25,14 @@ export const Gallery = () => {
         .from('gallery')
         .select('*')
         .eq('is_active', true)
-        .order('display_order', { ascending: true });
+        .order('display_order', { ascending: true })
+        .limit(10); // Limit initial load
       
       if (error) throw error;
       return data as GalleryImage[];
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (replaces cacheTime)
   });
 
   if (isLoading) {
@@ -68,11 +71,11 @@ export const Gallery = () => {
             opts={{
               align: "start",
               loop: true,
-              duration: 30,
+              duration: 20,
               skipSnaps: false,
               dragFree: false,
             }}
-            plugins={[Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]}
+            plugins={[Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true })]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
@@ -83,8 +86,13 @@ export const Gallery = () => {
                       <img
                         src={image.image_url}
                         alt={image.alt_text || image.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
+                        decoding="async"
+                        onLoad={(e) => {
+                          e.currentTarget.style.opacity = '1';
+                        }}
+                        style={{ opacity: 0, transition: 'opacity 0.3s ease-in-out' }}
                       />
                     </div>
                     {(image.title || image.description) && (

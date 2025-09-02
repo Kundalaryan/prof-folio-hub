@@ -13,11 +13,14 @@ export const Students = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .rpc('get_students_public')
-        .order('year_started', { ascending: false });
+        .order('year_started', { ascending: false })
+        .limit(20); // Limit initial load
       
       if (error) throw error;
       return data;
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   if (isLoading) {
