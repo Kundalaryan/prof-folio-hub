@@ -123,17 +123,17 @@ export const Publications = () => {
     <section id="publications" className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="heading-primary">Publications</h2>
+          <h2 className="heading-primary mb-8">Publications</h2>
           <Button 
             asChild 
             size="lg"
-            className="mb-8"
+            className="mb-8 font-medium"
           >
             <a 
               href="https://scholar.google.co.in/citations?user=AgLr5dcAAAAJ&hl=en" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2"
+              className="inline-flex items-center gap-2 no-underline"
             >
               <GraduationCap className="h-5 w-5" />
               View Google Scholar Profile
