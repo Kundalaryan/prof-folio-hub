@@ -5,12 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, LogOut, User as UserIcon, BookOpen, Users, MessageSquare, Images } from "lucide-react";
+import { Loader2, LogOut, User as UserIcon, BookOpen, Users, Images } from "lucide-react";
 import { ProfileManager } from "@/components/admin/ProfileManager";
 import { ResearchManager } from "@/components/admin/ResearchManager";
 import { PublicationsManager } from "@/components/admin/PublicationsManager";
 import { StudentsManager } from "@/components/admin/StudentsManager";
-import { MessagesManager } from "@/components/admin/MessagesManager";
 import { GalleryManager } from "@/components/admin/GalleryManager";
 import type { User, Session } from '@supabase/supabase-js';
 
@@ -107,7 +106,7 @@ const Admin = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <UserIcon className="h-4 w-4" />
               Profile
@@ -127,10 +126,6 @@ const Admin = () => {
             <TabsTrigger value="gallery" className="flex items-center gap-2">
               <Images className="h-4 w-4" />
               Gallery
-            </TabsTrigger>
-            <TabsTrigger value="messages" className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4" />
-              Messages
             </TabsTrigger>
           </TabsList>
 
@@ -205,19 +200,6 @@ const Admin = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="messages" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Contact Messages</CardTitle>
-                  <CardDescription>
-                    View and respond to messages from visitors
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <MessagesManager />
-                </CardContent>
-              </Card>
-            </TabsContent>
           </div>
         </Tabs>
       </main>
