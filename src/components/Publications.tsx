@@ -1,48 +1,59 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Skeleton } from "@/components/ui/skeleton";
-
-interface Publication {
-  id: string;
-  title: string;
-  authors: string;
-  journal?: string;
-  year?: number;
-  doi?: string;
-  url?: string;
-  abstract?: string;
-  citation_count?: number;
-  publication_type?: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ExternalLink, GraduationCap } from "lucide-react";
 
 export const Publications = () => {
+  const [filter, setFilter] = useState<'all' | 'recent' | 'older'>('all');
+  const [showCount, setShowCount] = useState(6);
+
   const { data: publications, isLoading } = useQuery({
     queryKey: ['publications'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('publications')
         .select('*')
-        .order('year', { ascending: false })
-        .limit(6); // Limit initial load
+        .order('year', { ascending: false });
       
       if (error) throw error;
-      return data as Publication[];
+      return data;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
   });
+
+  const currentYear = new Date().getFullYear();
+  
+  const filteredPublications = publications?.filter((pub) => {
+    if (filter === 'recent') return pub.year >= currentYear - 3;
+    if (filter === 'older') return pub.year < currentYear - 3;
+    return true;
+  }) || [];
+
+  const displayedPublications = filteredPublications.slice(0, showCount);
+  const hasMore = filteredPublications.length > showCount;
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Publications</h2>
-            <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          </div>
-          <div className="grid gap-6 md:gap-8">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-32 w-full" />
+      <section id="publications" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center mb-12">Publications</h2>
+          <div className="grid grid-cols-1 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader>
+                  <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-muted rounded w-1/2"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="h-3 bg-muted rounded"></div>
+                    <div className="h-3 bg-muted rounded w-5/6"></div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -50,90 +61,125 @@ export const Publications = () => {
     );
   }
 
-  if (!publications || publications.length === 0) {
-    return (
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Publications</h2>
-            <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-            <p className="text-muted-foreground text-lg">No publications available at the moment.</p>
+  const PublicationCard = ({ publication }: { publication: any }) => (
+    <Card className="h-full">
+      <CardHeader>
+        <div className="flex justify-between items-start gap-4">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-lg leading-tight">{publication.title}</CardTitle>
+            <p className="text-sm text-muted-foreground mt-2">
+              <span className="font-medium">Authors:</span> {publication.authors}
+            </p>
+            <div className="flex items-center gap-2 mt-2">
+              {publication.journal && (
+                <Badge variant="outline">
+                  {publication.journal}
+                </Badge>
+              )}
+              {publication.year && (
+                <Badge variant="secondary">
+                  {publication.year}
+                </Badge>
+              )}
+              {publication.publication_type && (
+                <Badge variant="outline">
+                  {publication.publication_type.charAt(0).toUpperCase() + publication.publication_type.slice(1)}
+                </Badge>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2">
+            {publication.url && (
+              <Button variant="ghost" size="icon" asChild>
+                <a href={publication.url} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
           </div>
         </div>
-      </section>
-    );
-  }
+      </CardHeader>
+      
+      <CardContent className="pt-0">
+        {publication.abstract && (
+          <p className="text-sm text-muted-foreground mb-4">
+            {publication.abstract}
+          </p>
+        )}
+        
+        <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+          {publication.doi && (
+            <span>DOI: {publication.doi}</span>
+          )}
+          {publication.citation_count > 0 && (
+            <span>• Citations: {publication.citation_count}</span>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
 
   return (
-    <section id="publications" className="py-20 bg-muted/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Publications</h2>
-          <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            A selection of recent research publications and academic contributions
-          </p>
-        </div>
+    <section id="publications" className="py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4">Publications</h2>
+          <Button 
+            asChild 
+            size="lg"
+            className="mb-8"
+          >
+            <a 
+              href="https://scholar.google.co.in/citations?user=AgLr5dcAAAAJ&hl=en" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2"
+            >
+              <GraduationCap className="h-5 w-5" />
+              View Google Scholar Profile
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </Button>
 
-        <div className="grid gap-6 md:gap-8">
-          {publications.map((publication) => (
-            <div key={publication.id} className="bg-card border border-border rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2">
-                    {publication.url ? (
-                      <a 
-                        href={publication.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="hover:text-primary transition-colors"
-                      >
-                        {publication.title}
-                      </a>
-                    ) : (
-                      publication.title
-                    )}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mb-2">{publication.authors}</p>
-                  
-                  {publication.journal && (
-                    <p className="text-sm text-muted-foreground mb-2">
-                      <span className="font-medium">{publication.journal}</span>
-                      {publication.year && ` (${publication.year})`}
-                    </p>
-                  )}
-                  
-                  {publication.abstract && (
-                    <p className="text-sm text-muted-foreground line-clamp-3">
-                      {publication.abstract}
-                    </p>
-                  )}
-                </div>
-                
-                <div className="flex flex-col items-end gap-2">
-                  {publication.year && (
-                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
-                      {publication.year}
-                    </span>
-                  )}
-                  
-                  {publication.publication_type && (
-                    <span className="bg-muted text-muted-foreground px-2 py-1 rounded text-xs uppercase">
-                      {publication.publication_type}
-                    </span>
-                  )}
-                  
-                  {publication.citation_count !== null && publication.citation_count !== undefined && (
-                    <span className="text-xs text-muted-foreground">
-                      {publication.citation_count} citations
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+          <Tabs value={filter} onValueChange={(value) => {
+            setFilter(value as 'all' | 'recent' | 'older');
+            setShowCount(6);
+          }} className="w-full max-w-md mx-auto">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="recent">Recent (3 years)</TabsTrigger>
+              <TabsTrigger value="older">Older</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
+        
+        {filteredPublications.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 gap-6">
+              {displayedPublications.map((publication) => (
+                <PublicationCard key={publication.id} publication={publication} />
+              ))}
+            </div>
+            
+            {hasMore && (
+              <div className="text-center mt-8">
+                <Button 
+                  onClick={() => setShowCount(prev => prev + 6)}
+                  variant="outline"
+                  size="lg"
+                >
+                  Load More Publications
+                </Button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-xl text-muted-foreground">
+              {filter === 'all' ? 'No publications listed yet.' : `No ${filter} publications found.`}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
