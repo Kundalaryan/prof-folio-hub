@@ -39,7 +39,7 @@ export const Publications = () => {
     return (
       <section id="publications" className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Publications</h2>
+          <h2 className="heading-primary text-center">Publications</h2>
           <div className="grid grid-cols-1 gap-6">
             {[1, 2, 3].map((i) => (
               <Card key={i} className="animate-pulse">
@@ -123,7 +123,7 @@ export const Publications = () => {
     <section id="publications" className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Publications</h2>
+          <h2 className="heading-primary">Publications</h2>
           <Button 
             asChild 
             size="lg"
@@ -155,7 +155,7 @@ export const Publications = () => {
         
         {filteredPublications.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {displayedPublications.map((publication) => (
                 <PublicationCard key={publication.id} publication={publication} />
               ))}

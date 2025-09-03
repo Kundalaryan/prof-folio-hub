@@ -56,9 +56,9 @@ export const Gallery = () => {
     <section id="gallery" className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Awards & Achievements</h2>
+          <h2 className="heading-primary">Awards & Achievements</h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+          <p className="text-body max-w-3xl mx-auto">
             A visual showcase of our Awards & Achievements
           </p>
         </div>
@@ -77,7 +77,7 @@ export const Gallery = () => {
           >
             <CarouselContent className="-ml-2 md:-ml-4">
               {images.map((image) => (
-                <CarouselItem key={image.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={image.id} className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                   <Card className="overflow-hidden group hover:shadow-lg transition-shadow duration-300">
                     <div className="aspect-square overflow-hidden">
                       <img
