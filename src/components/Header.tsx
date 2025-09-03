@@ -53,12 +53,6 @@ export const Header = () => {
             >
               Awards
             </button>
-            <button
-              onClick={() => scrollToSection('contact')}
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              Contact
-            </button>
           </nav>
 
           {/* Mobile menu button */}
@@ -106,12 +100,6 @@ export const Header = () => {
                 className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
               >
                 Gallery
-              </button>
-              <button
-                onClick={() => scrollToSection('contact')}
-                className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
-              >
-                Contact
               </button>
             </div>
           </div>
