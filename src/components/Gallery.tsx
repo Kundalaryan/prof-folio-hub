@@ -56,9 +56,9 @@ export const Gallery = () => {
     <section id="gallery" className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="heading-primary">Awards & Achievements</h2>
+          <h2 className="heading-primary mb-6">Awards & Achievements</h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-body max-w-3xl mx-auto">
+          <p className="text-body max-w-3xl mx-auto font-medium">
             A visual showcase of our Awards & Achievements
           </p>
         </div>
