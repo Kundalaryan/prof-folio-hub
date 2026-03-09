@@ -322,12 +322,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      cleanup_old_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
       get_profiles_public: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           bio: string
           created_at: string
@@ -344,7 +341,7 @@ export type Database = {
         }[]
       }
       get_students_public: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           bio: string
           created_at: string
