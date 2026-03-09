@@ -60,6 +60,9 @@ export const Research = () => {
                       src={project.image_url} 
                       alt={project.title}
                       className="object-cover w-full h-full"
+                      loading="lazy"
+                    />
+                      className="object-cover w-full h-full"
                     />
                   </div>
                 )}
