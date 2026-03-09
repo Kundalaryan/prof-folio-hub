@@ -69,8 +69,8 @@ export const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+          <div className="md:hidden animate-in slide-in-from-top-2 duration-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t">
               <button
                 onClick={() => scrollToSection('about')}
                 className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
