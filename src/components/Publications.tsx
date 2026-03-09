@@ -9,6 +9,7 @@ import { ExternalLink, GraduationCap } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const Publications = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [filter, setFilter] = useState<'all' | 'recent' | 'older'>('all');
   const [showCount, setShowCount] = useState(6);
 
