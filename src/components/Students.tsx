@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ExternalLink, Linkedin } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const StudentCard = ({ student }: { student: any }) => (
   <Card className="card-enhanced">
