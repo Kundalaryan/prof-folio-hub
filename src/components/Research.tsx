@@ -62,8 +62,6 @@ export const Research = () => {
                       className="object-cover w-full h-full"
                       loading="lazy"
                     />
-                      className="object-cover w-full h-full"
-                    />
                   </div>
                 )}
                 
