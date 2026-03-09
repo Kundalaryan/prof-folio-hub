@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ExternalLink, Linkedin } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const StudentCard = ({ student }: { student: any }) => (
   <Card className="card-enhanced">
@@ -105,6 +106,7 @@ const StudentGrid = ({ students, emptyMessage }: { students: any[]; emptyMessage
 );
 
 export const Students = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const { data: students, isLoading } = useQuery({
     queryKey: ['students-public'],
     queryFn: async () => {
@@ -161,7 +163,7 @@ export const Students = () => {
   }
 
   return (
-    <section id="students" className="section-padding bg-gradient-hero">
+    <section id="students" ref={ref} className={`section-padding bg-gradient-hero transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="container-custom">
         <h2 className="heading-secondary text-center mb-12">Students</h2>
         

@@ -2,8 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const Hero = () => {
+  const { ref, isVisible } = useScrollAnimation(0.1);
+
   const { data: profile } = useQuery({
     queryKey: ['profile-public'],
     queryFn: async () => {
@@ -18,7 +21,13 @@ export const Hero = () => {
   });
 
   return (
-    <section id="about" className="py-20 bg-gradient-to-b from-background to-muted/20">
+    <section
+      id="about"
+      ref={ref}
+      className={`py-20 bg-gradient-to-b from-background to-muted/20 transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -61,7 +70,7 @@ export const Hero = () => {
           </div>
           
           <div className="flex justify-center lg:justify-end">
-            <Card className="p-8 bg-white shadow-lg">
+            <Card className="p-8 bg-card shadow-lg">
               <Avatar className="w-64 h-64 mx-auto">
                 <AvatarImage 
                   src={profile?.profile_image_url || "/placeholder.svg"} 

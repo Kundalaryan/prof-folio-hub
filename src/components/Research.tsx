@@ -4,8 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Calendar, DollarSign } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const Research = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const { data: projects, isLoading } = useQuery({
     queryKey: ['research-projects'],
     queryFn: async () => {
@@ -46,7 +48,7 @@ export const Research = () => {
   }
 
   return (
-    <section id="research" className="py-20 bg-muted/20">
+    <section id="research" ref={ref} className={`section-padding bg-muted/20 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="heading-secondary text-center mb-12">Research & Projects</h2>
         
