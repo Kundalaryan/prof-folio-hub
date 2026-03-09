@@ -106,6 +106,7 @@ const StudentGrid = ({ students, emptyMessage }: { students: any[]; emptyMessage
 );
 
 export const Students = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const { data: students, isLoading } = useQuery({
     queryKey: ['students-public'],
     queryFn: async () => {
