@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 interface GalleryImage {
   id: string;
@@ -18,6 +19,8 @@ interface GalleryImage {
 }
 
 export const Gallery = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   const { data: images, isLoading } = useQuery({
     queryKey: ['gallery-images'],
     queryFn: async () => {
@@ -34,10 +37,10 @@ export const Gallery = () => {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
-        <div className="max-w-7xl mx-auto">
+      <section className="section-padding bg-muted/50">
+        <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Gallery</h2>
+            <h2 className="heading-secondary text-foreground mb-4">Awards & Achievements</h2>
             <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
               Loading images...
@@ -53,12 +56,18 @@ export const Gallery = () => {
   }
 
   return (
-    <section id="gallery" className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/50">
-      <div className="max-w-7xl mx-auto">
+    <section
+      id="gallery"
+      ref={ref}
+      className={`section-padding bg-muted/50 transition-all duration-700 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
+      <div className="container-custom">
         <div className="text-center mb-12">
-          <h2 className="heading-primary mb-6">Awards & Achievements</h2>
+          <h2 className="heading-secondary mb-4">Awards & Achievements</h2>
           <div className="w-24 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-body max-w-3xl mx-auto font-medium">
+          <p className="text-body text-muted-foreground max-w-3xl mx-auto font-medium">
             A visual showcase of our Awards & Achievements
           </p>
         </div>
