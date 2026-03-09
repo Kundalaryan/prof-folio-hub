@@ -7,6 +7,7 @@ import { ExternalLink, Calendar, DollarSign } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 export const Research = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const { data: projects, isLoading } = useQuery({
     queryKey: ['research-projects'],
     queryFn: async () => {
