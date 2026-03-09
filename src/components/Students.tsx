@@ -163,7 +163,7 @@ export const Students = () => {
   }
 
   return (
-    <section id="students" className="section-padding bg-gradient-hero">
+    <section id="students" ref={ref} className={`section-padding bg-gradient-hero transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <div className="container-custom">
         <h2 className="heading-secondary text-center mb-12">Students</h2>
         
